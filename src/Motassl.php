@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
-
+namespace Omarius;
 use GuzzleHttp\Client;
 class Motassl {
     protected $base_url = 'https://api.mottasl.com/v2/';
