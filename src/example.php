@@ -2,7 +2,7 @@
 include_once 'Motassl.php';
 
 $key = "Your API KEY";
-$motassl = Omarius\Motassl::auth($key);
+$motassl = Motassl::auth($key);
 
 $templateMessage = $motassl
     ->to('0123456789')
