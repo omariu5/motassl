@@ -1,12 +1,10 @@
 <?php
-namespace Omarius;
+namespace Whatsapp;
 use GuzzleHttp\Client;
+
 class Motassl {
-    protected $base_url = 'https://api.mottasl.com/v2/';
-    protected $instance;
     protected $payload;
-    public function __construct(private $key){
-        $this->instance = $this;
+    public function __construct(private $key,private $base_url = 'https://api.mottasl.com/v2/'){
         $this->payload = [
             'channel' => 'whatsapp',
         ];
@@ -15,10 +13,12 @@ class Motassl {
     static function auth($key) {
         return new Motassl($key);
     }
+
     function to($recipient) {
         $this->payload['recipient'] = $recipient;
         return $this;
     }
+
     function text($message){
         $this->payload['type'] = 'text';
         $this->payload['message'] = $message;
@@ -37,16 +37,20 @@ class Motassl {
 
     function send() {
         $client = new Client(['base_uri'=>$this->base_url]);
-        $req = $client->request('POST','message',[
+        $options = [
             'headers'=>[
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
                 'apikey' => $this->key
             ],
             'json' => $this->payload
-        ]);
-        return $req->getBody()->getContents();
+        ];
+        try {
+            $req = $client->request('POST','message',$options);
+            return $req->getBody()->getContents();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
-
 
 }
