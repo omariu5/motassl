@@ -11,6 +11,7 @@ class Motassl {
     private $base_url;
     public function __construct($key,$base_url = 'https://api.mottasl.com/v2/'){
         $this->key = $key;
+        $this->base_url = $base_url;
         $this->payload = [
             'channel' => 'whatsapp',
         ];
