@@ -7,8 +7,10 @@ class Motassl {
     protected $media = false;
     protected $button = false;
     protected $template = false;
-
-    public function __construct(private $key,private $base_url = 'https://api.mottasl.com/v2/'){
+    private $key;
+    private $base_url;
+    public function __construct($key,$base_url = 'https://api.mottasl.com/v2/'){
+        $this->key = $key;
         $this->payload = [
             'channel' => 'whatsapp',
         ];
