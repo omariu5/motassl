@@ -1,12 +1,15 @@
 <?php
 namespace Whatsapp;
-use GuzzleHttp\Client;
+
+require_once __DIR__.'/CurlHelper.php';
+use Mervick\CurlHelper;
 
 class Motassl {
     protected $payload;
     protected $media = false;
     protected $button = false;
     protected $template = false;
+
     private $key;
     private $base_url;
     public function __construct($key,$base_url = 'https://api.mottasl.com/v2/'){
@@ -70,20 +73,28 @@ class Motassl {
             $this->payload['type'] = 'buttonTemplate';
         }
     }
+    function url ($path) {
+        return $this->base_url.$path;
+    }
+
+    function getHeaders(){
+        return [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'apikey' => $this->key
+        ];
+    }
+
     function send() {
         $this->prepare();
-        $client = new Client(['base_uri'=>$this->base_url]);
-        $options = [
-            'headers'=>[
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-                'apikey' => $this->key
-            ],
-            'json' => $this->payload
-        ];
+        /*
+        * For CurlHelper Documentation: https://github.com/mervick/curl-helper
+         */
+        $client = CurlHelper::factory($this->url('message'));
+        $client->setHeaders($this->getHeaders())->setPostFields($this->payload);
         try {
-            $req = $client->request('POST','message',$options);
-            return $req->getBody()->getContents();
+            $response = $client->exec();
+            return $response;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
