@@ -598,7 +598,7 @@ class CurlHelper
         }
 
         if (!$returnData || $returnData === 'data') {
-            $json_data = !empty($content) && in_array($content{0}, ['{', '[']) ? json_decode($content, true) : false;
+            $json_data = !empty($content) && in_array($content[0], ['{', '[']) ? json_decode($content, true) : false;
         }
 
         if (!$returnData || $returnData === 'headers') {
